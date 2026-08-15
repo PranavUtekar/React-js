@@ -1,18 +1,15 @@
 import { useState } from "react";
 
-
-function CartSystem(){
-    const [productCart, productinfo]  = useState([]);
-
-    // console.log(productCart);
-    
-
-    const products= [
+const products= [
         {name:"Nike Shoes", price:5000},
         {name:"Shirt", price:300},
         {name:"Watch", price:6000},
 
     ]
+function CartSystem(){
+    const [productCart, productinfo]  = useState([]);
+
+    // console.log(productCart);
 
     function displayCart(items){
        return items.map((everyItem)=>{
@@ -26,7 +23,7 @@ function CartSystem(){
                         display : "flex"
                     }
                     }>
-                        <button>-</button>
+                        <button onClick={()=>{decreaseQuantity(itemcheck)}}>-</button>
                         <p>{itemcheck.quantity}</p>
                         <button onClick={()=>{increaseQuantity(itemcheck)}}>+</button>
                     </div>)
@@ -68,6 +65,27 @@ function CartSystem(){
         productinfo(quantityForCart);
     }
 
+    function decreaseQuantity(itemsObject){
+       const newProductCart =  productCart.map((innerObject)=>{
+            if (itemsObject.name === innerObject.name && innerObject.quantity>1) {
+                const decreasedQuantityObject = {
+                    ...innerObject,
+                    quantity: innerObject.quantity-1,
+                }
+
+
+                return decreasedQuantityObject
+            }
+
+            return innerObject;
+        })
+        return productinfo(newProductCart.filter((innerObject)=>{
+            if (innerObject.name === itemsObject.name && innerObject.quantity==1) {
+                return false;
+            }
+            return true;
+        }));
+    }
 
     return(
         <>
